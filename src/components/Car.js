@@ -1,15 +1,19 @@
 import React, { useState, useEffect} from 'react';
-import firebase from '../firebase/firebaseConfig';
+import firebase  from '../firebase/firebaseConfig';
 
-function Car(){
+function Car({user}){
 
     const [listCarrito, seltListCarrito] = new useState(null)
     let total = 0;
+
+    
     
   
 
     const peticionesGet = () => {
-        firebase.child('carrito').on('value', carrito => {
+        const uid = user.uid;
+        const db = firebase.database().ref();
+        db.child('carrito').child(uid).on('value', carrito => {
             seltListCarrito(carrito.val());
             console.log(listCarrito);
         })
@@ -20,21 +24,24 @@ function Car(){
     },[])
 
     const addQuantility = (id) =>{
-        console.log(id);
-         firebase.child(`carrito`).child(id).once("value", snapshot => {
+        const uid = user.uid;
+        const db = firebase.database().ref();
+        db.child(`carrito`).child(uid).child(id).once("value", snapshot => {
              console.log(snapshot.exists());
             if (snapshot.exists()){
                 console.log("Existe!");    
                 let quantility = parseInt(snapshot.child("quantility").val())+1;
                 console.log(quantility); 
-                firebase.child(`carrito`).child(id).child("quantility").set(quantility)
+                db.child(`carrito`).child(uid).child(id).child("quantility").set(quantility)
             }
          });
      
     }
 
     const removeQuantility = (id) =>{
-         firebase.child(`carrito`).child(id).once("value", snapshot => {
+        const uid = user.uid;
+        const db = firebase.database().ref();
+        db.child(`carrito`).child(uid).child(id).once("value", snapshot => {
              console.log(snapshot.exists());
             if (snapshot.exists()){
                 console.log("Existe!");    
@@ -42,7 +49,7 @@ function Car(){
                 console.log(quantility); 
                if(quantility > 0){
                 
-                firebase.child(`carrito`).child(id).child("quantility").set(quantility)
+                db.child(`carrito`).child(uid).child(id).child("quantility").set(quantility)
                }else{
                     removeProduct(id);
                }
@@ -52,7 +59,9 @@ function Car(){
     }
     
     const removeProduct = (id) =>{
-        firebase.child(`carrito`).child(id).remove(
+        const uid = user.uid;
+        const db = firebase.database().ref();
+        db.child(`carrito`).child(uid).child(id).remove(
             error => {
               if(error)console.log(error);
             }

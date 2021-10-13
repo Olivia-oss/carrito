@@ -11,25 +11,27 @@ const Itemcard = (props) => {
                     <h5 className="card-title">{props.title}</h5>
                     <h5 className="card-title">${props.price}</h5>
                     <p className="card-text">{props.desc}</p>
-                    <button href="#" className="btn btn-success"  onClick={() => addCard(props.item, props.id)}>Añadir a carrito</button>
+                    <button className="btn btn-success items-end"  onClick={() => addCard(props.item, props.id, props.user)}>Añadir a carrito</button>
                 </div>
             </div>
         </div>
     )
 }
 
-const addCard = (item, id) =>{
-    console.log(id);
-     firebase.child(`carrito`).child(id).once("value", snapshot => {
+const addCard = (item, id, user) =>{
+    const db = firebase.database().ref();
+    const uid = user.uid;
+  
+    db.child(`carrito`).child(uid).child(id).once("value", snapshot => {
          console.log(snapshot.exists());
         if (snapshot.exists()){
             console.log("Existe!");    
             let quantility = parseInt(snapshot.child("quantility").val())+1;
             console.log(quantility); 
-            firebase.child(`carrito`).child(id).child("quantility").set(quantility)
+            db.child(`carrito`).child(id).child("quantility").set(quantility)
         }else{
             console.log("No Existe!");
-            firebase.child(`carrito`).child(id).set({
+            db.child(`carrito`).child(uid).child(id).set({
                 "title":item.title,
                 "desc":item.desc,
                 "img":item.img,

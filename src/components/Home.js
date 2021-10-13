@@ -4,12 +4,13 @@ import firebase from '../firebase/firebaseConfig';
 
 
 
-function Home(){
+function Home({user}){
 
     const [listProduct, seltListProduct] = new useState(null)
 
     const peticionesGet = () => {
-        firebase.child('product').on('value', product => {
+        const db = firebase.database().ref();
+        db.child('product').on('value', product => {
             seltListProduct(product.val());
         })
     }
@@ -38,6 +39,7 @@ function Home(){
                             price={listProduct[i].price} 
                             item={listProduct[i]} 
                             id={i}
+                            user = {user}
                            />
                         )
                         
