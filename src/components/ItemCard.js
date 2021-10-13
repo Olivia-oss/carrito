@@ -11,7 +11,7 @@ const Itemcard = (props) => {
                     <h5 className="card-title">{props.title}</h5>
                     <h5 className="card-title">${props.price}</h5>
                     <p className="card-text">{props.desc}</p>
-                    <a href="#" className="btn btn-success"  onClick={() => addCard(props.item, props.id)}>Añadir a carrito</a>
+                    <button href="#" className="btn btn-success"  onClick={() => addCard(props.item, props.id)}>Añadir a carrito</button>
                 </div>
             </div>
         </div>
