@@ -86,7 +86,7 @@ function Car(){
                                             <img src={listCarrito[i].img} style={{height : '6rem'}}/>
                                         </td>
                                         <td>{listCarrito[i].title}</td>
-                                        <td>{listCarrito[i].price}</td>
+                                        <td>{(listCarrito[i].price * listCarrito[i].quantility)}</td>
                                         <td>Cantidad ({listCarrito[i].quantility})</td>
                                         <td>
                                             <button className="btn btn-info ms-2"
